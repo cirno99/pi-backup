@@ -1,0 +1,17 @@
+{
+  "name": "pi-statusline",
+  "version": "0.1.0",
+  "private": true,
+  "description": "pi \u4fe1\u606f\u4e30\u5bcc\u7684\u72b6\u6001\u680f\u6269\u5c55\uff08\u81ea @normful/pi-statusline \u5265\u79bb\u7ef4\u62a4\uff09\uff1a\u4e0a\u4e0b\u6587\u5360\u7528\u3001\u6d41\u5f0f CPS\u3001\u7f13\u5b58\u547d\u4e2d\u7387\u3001\u6210\u672c\u3001\u6a21\u578b\u4fe1\u606f\u3001git \u5206\u652f\u3001hash \u914d\u8272\u5de5\u4f5c\u76ee\u5f55",
+  "license": "MIT",
+  "type": "module",
+  "peerDependencies": {
+    "@earendil-works/pi-agent-core": "*",
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
+  },
+  "pi": {
+    "extensions": []
+  }
+}
