@@ -1,0 +1,98 @@
+# pi-backup
+
+pi 配置的备份 / 恢复方案：一键备份 `~/.pi/agent/` 核心配置（**不含私密信息**），可放心推到 GitHub（建议私有仓库）；换机时一条命令还原全部环境。
+
+## 目录结构
+
+```
+pi-backup/
+├── backup-pi.sh                  # 备份脚本（生成新的备份产物）
+├── restore-pi.sh                 # 恢复脚本（随备份产物一起入库）
+├── RESTORE.md                    # 备份 / 恢复 / 推送 GitHub 的完整说明
+├── README.md                     # 本文档
+├── docs/
+│   └── screenshots/
+│       └── privacy-check.png     # 隐私脱敏检查结果截图
+└── pi-config-<时间戳>/           # 备份产物（每次备份生成一个目录）
+    ├── manifest.txt              # 备份清单：时间、版本、包列表、技能列表、排除项
+    ├── RESTORE.md                # 恢复说明副本
+    ├── restore-pi.sh             # 恢复脚本副本（随备份走，解压即用）
+    └── agent/                    # ~/.pi/agent 的核心配置子集
+        ├── settings.json         # 主配置（扩展路径已脱敏为 $HOME 占位符）
+        ├── AGENTS.md             # 全局开发约定
+        ├── pi-lsp.json           # LSP 服务器配置（rust-analyzer / gopls / clangd / zls）
+        ├── subagents.json        # 子代理配置
+        ├── models-store.json     # 模型服务商与价格缓存
+        ├── prompts/              # 提示词模板
+        ├── extensions/           # 扩展源码（见下方"使用的扩展"）
+        ├── compiled/             # 扩展编译产物 + update-extensions.sh 打包脚本
+        ├── themes/               # 主题（catppuccin-macchiato 等）
+        ├── sounds/               # 提示音效
+        └── npm/                  # 扩展依赖配方（package.json + package-lock.json）
+```
+
+## 脚本作用
+
+| 脚本 | 作用 |
+|---|---|
+| `backup-pi.sh` | 把 `~/.pi/agent/` 备份到 `pi-config-<时间戳>/`。自动排除私密/可重建内容（登录凭据、会话记录、node_modules、技能），并把 `settings.json` 里的绝对路径脱敏为 `$HOME` 占位符，最后生成 `manifest.txt`。支持 `PI_TAR=1` 打包成 tar.gz、`PI_BACKUP_ROOT` 指定备份根目录 |
+| `restore-pi.sh` | 从备份目录或 tar.gz 恢复：先移走现有 `~/.pi`（防覆盖）→ 复制核心配置 → 还原 `settings.json` 中的真实路径 → 按配方重建扩展环境（`pi install` + `npm ci` + bun 重新打包编译产物）→ 提示后续手动步骤（重新登录等） |
+| `compiled/update-extensions.sh` | 扩展打包脚本：把 `extensions/` 下的源码 + npm 依赖 bundle 成 `compiled/*.js`（settings.json 引用的就是这些产物）。`--build-only` 只重打包不检查更新，pi 升级后建议重跑一次 |
+
+> 备份产物目录里也含 `RESTORE.md` 和 `restore-pi.sh` 副本，即使脱离仓库单独分发 tar.gz 也能完整恢复。
+
+## 使用的扩展
+
+`settings.json` 通过 `extensions` 数组加载 `compiled/` 下的编译产物；`packages` 列表由 `pi install` 注册；`npm/` 的配方则保证 node_modules 可按 lock 精确复现。
+
+### 编译产物加载的扩展（`compiled/*.js`）
+
+| 扩展 | 作用 |
+|---|---|
+| `pi-statusline.js` | 信息丰富的状态栏（上下文占用、流式 CPS、缓存命中率、成本、模型信息、git 分支等），本地维护版 |
+| `pi-readseek.js` | ReadSeek 工具组：带 LINE:HASH 锚点的文件读写 / 搜索 / 符号导航（覆盖内置 read / edit / write） |
+| `pi-observational-memory.js` | 观察记忆：自动压缩会话要点，可通过 `recall` 精确恢复原始上下文 |
+| `@tintinweb-pi-subagents.js` | 子代理管理：并行执行独立任务、后台运行、中途引导、结果回收 |
+| `@juicesharp-rpiv-web-tools.js` | Web 工具：联网搜索与网页抓取 |
+| `pi-rtk-optimizer.js` | 输出优化：精简冗余输出、压缩无关内容、节省 token |
+| `@juicesharp-rpiv-ask-user-question.js` | 结构化提问：多选项问卷，处理需求模糊的场景 |
+| `@narumitw-pi-btw.js` | 运行中通知（标题栏 / 声音提示） |
+| `@narumitw-pi-lsp.js` | LSP 集成：诊断、代码修复（配合 `pi-lsp.json` 的服务器配置） |
+| `pi-cache-optimizer.js` | 缓存优化：提升 prompt 缓存命中率、降低成本 |
+
+### pi 包（`packages`，`pi install` 安装）
+
+| 包 | 作用 |
+|---|---|
+| `@ff-labs/pi-fff` | 文件模糊搜索（`fffind` / `ffgrep`），按访问频率排序 |
+| `pi-context-usage` | 上下文用量统计 |
+| `@tifan/pi-preferred-thinking` | 按模型设定默认思考级别（配合 `extensions/pi-preferred-thinking.json`） |
+| `pi-workspace-history` | 工作区历史记录 |
+| `pi-init` | 项目初始化脚手架（skills / 自定义 agent 模板） |
+| `pi-session-name` | 会话命名 |
+
+> 扩展依赖的 node_modules（约 500M）不备份，恢复时靠 `npm/` 配方 `npm ci` 重建；`extensions/` 源码目录保留完整注释与文档，便于二次开发。
+
+## 隐私安全
+
+备份产物不含任何私密信息，已自动处理：
+
+- **排除**：登录凭据（`auth.json`）、会话记录、API key（仅存在于环境变量）、node_modules、技能内容
+- **脱敏**：`settings.json` 中扩展的绝对路径替换为 `$HOME` 占位符，恢复时自动还原（换用户名也有效）
+- **自查**：上传前可对照下方截图检查确认
+
+![隐私脱敏检查结果](docs/screenshots/privacy-check.png)
+
+## 快速开始
+
+```bash
+# 备份
+cd ~/pi-backup
+./backup-pi.sh            # 生成 pi-config-<时间戳>/
+PI_TAR=1 ./backup-pi.sh   # 或打包成单个 tar.gz
+
+# 恢复（新机器，pi 已安装）
+./restore-pi.sh pi-config-<时间戳>/
+```
+
+完整操作（推 GitHub、恢复到新机器、常见问题）见 [RESTORE.md](RESTORE.md)。
