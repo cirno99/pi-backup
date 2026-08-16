@@ -28,7 +28,7 @@ pi-backup/
         ├── compiled/             # 扩展编译产物 + update-extensions.sh 打包脚本
         ├── themes/               # 主题（catppuccin-macchiato 等）
         ├── sounds/               # 提示音效
-        └── npm/                  # 扩展依赖配方（package.json + package-lock.json）
+        └── npm/                  # 扩展依赖配方（package.json + bun.lock，node_modules 不备份）
 ```
 
 ## 脚本作用
@@ -36,8 +36,8 @@ pi-backup/
 | 脚本 | 作用 |
 |---|---|
 | `backup-pi.sh` | 把 `~/.pi/agent/` 备份到 `pi-config-<时间戳>/`。自动排除私密/可重建内容（登录凭据、会话记录、node_modules、技能），并把 `settings.json` 里的绝对路径脱敏为 `$HOME` 占位符，最后生成 `manifest.txt`。支持 `PI_TAR=1` 打包成 tar.gz、`PI_BACKUP_ROOT` 指定备份根目录 |
-| `restore-pi.sh` | 从备份目录或 tar.gz 恢复：先移走现有 `~/.pi`（防覆盖）→ 复制核心配置 → 还原 `settings.json` 中的真实路径 → 按配方重建扩展环境（`pi install` + `npm ci` + bun 重新打包编译产物）→ 提示后续手动步骤（重新登录等） |
-| `compiled/update-extensions.sh` | 扩展打包脚本：把 `extensions/` 下的源码 + npm 依赖 bundle 成 `compiled/*.js`（settings.json 引用的就是这些产物）。`--build-only` 只重打包不检查更新，pi 升级后建议重跑一次 |
+| `restore-pi.sh` | 从备份目录或 tar.gz 恢复：先移走现有 `~/.pi`（防覆盖）→ 复制核心配置 → 还原 `settings.json` 中的真实路径 → 按配方重建扩展环境（`pi install` + `bun ci --omit=peer` + bun 重新打包编译产物）→ 提示后续手动步骤（重新登录等） |
+| `compiled/update-extensions.sh` | 扩展打包脚本：把 `extensions/` 下的源码 + npm/ 目录依赖 bundle 成 `compiled/*.js`（settings.json 引用的就是这些产物）。`--build-only` 只重打包不检查更新，pi 升级后建议重跑一次 |
 
 ## 工具链与前置要求
 
@@ -48,20 +48,19 @@ pi-backup/
 | `pi` | 可选 | **必需** | 恢复脚本会校验存在并提示版本；建议与备份同版本（见 `manifest.txt` 的版本号）。用 `mise use -g pi@<版本>` 安装 |
 | `rsync` | **必需** | **必需** | 备份/恢复核心配置。缺失时 `backup-pi.sh` 会直接报错退出 |
 | `python3` | 必需 | 必需 | 解析 `settings.json`、生成 `manifest.txt`、修正/还原扩展绝对路径、注册 pi 包 |
-| `npm`（Node.js） | 可选 | **必需** | 恢复时按 `npm/package-lock.json` 执行 `npm ci` 重建 node_modules（约 500M，需联网）；备份机的 `PI_TAR=1` 不需要。建议与备份时同版本 |
-| `bun` | — | 建议 | 恢复时重新打包扩展编译产物（`update-extensions.sh --build-only`）。缺失则跳过打包，直接用备份里的 `compiled/*.js`，通常也能运行 |
+| `bun` | — | **必需** | 恢复时按 `npm/package.json` + `bun.lock` 执行 `bun ci --omit=peer` 重建 node_modules（约 110M，需联网；`--omit=peer` 跳过 @earendil-works/pi-* 等由 pi 宿主注入的 peer 依赖，与 pi 安装参数一致）；同时用于重新打包扩展编译产物（`update-extensions.sh --build-only`）。npmCommand 已切换为 bun，pi 装包也依赖它，缺失时恢复脚本直接报错。建议与备份时同版本 |
 | `tar` | 打包时 | 解压时 | 仅 `PI_TAR=1` 打包 / 恢复 tar.gz 备份时需要 |
 
 > **备份机**只负责生成产物，只需 `rsync` + `python3`（外加可选的 `pi` 用于记录版本号）。
-> **恢复机**的完整要求：`pi`、`rsync`、`python3`、`npm`，建议再加 `bun`。
+> **恢复机**的完整要求：`pi`、`rsync`、`python3`、`bun`。
 >
-> `update-extensions.sh` 的依赖：完整流程需要 `pi` + `npm` + `bun`（联网更新依赖）；`--build-only` 只需 `bun`，不需要网络。
+> `update-extensions.sh` 的依赖：完整流程需要 `pi` + `bun`（联网更新依赖）；`--build-only` 只需 `bun`，不需要网络。
 
 > 备份产物目录里也含 `RESTORE.md` 和 `restore-pi.sh` 副本，即使脱离仓库单独分发 tar.gz 也能完整恢复。
 
 ## 使用的扩展
 
-`settings.json` 通过 `extensions` 数组加载 `compiled/` 下的编译产物；`packages` 列表由 `pi install` 注册；`npm/` 的配方则保证 node_modules 可按 lock 精确复现。
+`settings.json` 通过 `extensions` 数组加载 `compiled/` 下的编译产物；`packages` 列表由 `pi install` 注册；`npm/` 的配方则保证 node_modules 可按 `bun.lock` 精确复现。
 
 ### 编译产物加载的扩展（`compiled/*.js`）
 
@@ -89,7 +88,7 @@ pi-backup/
 | `pi-init` | 项目初始化脚手架（skills / 自定义 agent 模板） |
 | `pi-session-name` | 会话命名 |
 
-> 扩展依赖的 node_modules（约 500M）不备份，恢复时靠 `npm/` 配方 `npm ci` 重建；`extensions/` 源码目录保留完整注释与文档，便于二次开发。
+> 扩展依赖的 node_modules（约 110M）不备份，恢复时靠 `npm/` 配方 `bun ci --omit=peer` 重建；`extensions/` 源码目录保留完整注释与文档，便于二次开发。
 
 ## 隐私安全
 

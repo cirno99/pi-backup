@@ -22,6 +22,9 @@ fi
 echo "==> 检查 pi 是否已安装 ..."
 command -v pi >/dev/null || { echo "❌ 未找到 pi。请先安装 pi（建议与备份时同版本，见 manifest.txt），例如: mise use -g pi@<版本>"; exit 1; }
 echo "    pi 版本: $(pi --version)"
+echo "==> 检查 bun 是否已安装 ..."
+command -v bun >/dev/null || { echo "❌ 未找到 bun。npmCommand 已切换为 bun，装包与重建 node_modules 都依赖它。请先安装: mise use -g bun（建议与备份时同版本）"; exit 1; }
+echo "    bun 版本: $(bun --version)"
 
 # ------------------------------------------------------------
 # 1. 防呆：已有配置先备份移走
@@ -73,16 +76,18 @@ fi
 
 # ------------------------------------------------------------
 # 5. 重建扩展环境：node_modules + 编译产物
-#    node_modules 不备份，依据备份的 package.json/package-lock.json 重建
+#    node_modules 不备份，依据备份的 package.json/bun.lock 重建
+#    npmCommand 已切换为 bun：必须用 bun ci --omit=peer
+#    （--omit=peer 跳过 @earendil-works/pi-* 等由 pi 宿主注入的 peer 依赖，与 pi 安装参数一致）
 # ------------------------------------------------------------
-echo "==> 恢复 npm 依赖配方（package.json / package-lock.json）..."
+echo "==> 恢复 bun 依赖配方（package.json / bun.lock）..."
 if [ -d "$SRC/agent/npm" ]; then
   mkdir -p "$HOME/.pi/agent/npm"
   cp "$SRC/agent/npm/"* "$HOME/.pi/agent/npm/" 2>/dev/null || true
   ls "$HOME/.pi/agent/npm/"
 fi
 
-echo "==> 注册 pi 包（settings.json 的 packages 列表）..."
+echo "==> 注册 pi 包（settings.json 的 packages 列表，pi install 走 bun）..."
 python3 - "$HOME/.pi/agent/settings.json" <<'PY' | while read -r pkg; do
 import json, sys
 cfg = json.load(open(sys.argv[1]))
@@ -94,22 +99,23 @@ PY
   pi install "$pkg" || echo "    ⚠️  安装 $pkg 失败（可稍后手动: pi install $pkg）"
 done
 
-echo "==> npm ci 重建 node_modules（依据 package-lock.json，需联网）..."
-if [ -f "$HOME/.pi/agent/npm/package-lock.json" ]; then
-  (cd "$HOME/.pi/agent/npm" && npm ci) || {
-    echo "    ⚠️  npm ci 失败，改用 npm install ..."
-    (cd "$HOME/.pi/agent/npm" && npm install) || echo "    ⚠️  npm install 失败，请联网后手动执行: cd ~/.pi/agent/npm && npm ci"
+echo "==> bun ci 重建 node_modules（依据 bun.lock，需联网）..."
+if [ -f "$HOME/.pi/agent/npm/bun.lock" ]; then
+  (cd "$HOME/.pi/agent/npm" && bun ci --omit=peer) || {
+    echo "    ⚠️  bun ci 失败，改用 bun install --omit=peer ..."
+    (cd "$HOME/.pi/agent/npm" && bun install --omit=peer) || echo "    ⚠️  bun install 失败，请联网后手动执行: cd ~/.pi/agent/npm && bun ci --omit=peer"
   }
 else
-  echo "    ⚠️  无 package-lock.json，手动执行: cd ~/.pi/agent/npm && npm install"
+  echo "    ⚠️  无 bun.lock（旧备份只有 package-lock.json？），改用 bun install --omit=peer（重新解析并生成 bun.lock）"
+  (cd "$HOME/.pi/agent/npm" && bun install --omit=peer) || echo "    ⚠️  bun install 失败，请联网后手动执行: cd ~/.pi/agent/npm && bun install --omit=peer"
 fi
 
-echo "==> 重新打包扩展编译产物（需要 bun）..."
-if command -v bun >/dev/null 2>&1 && [ -f "$HOME/.pi/agent/compiled/update-extensions.sh" ]; then
+echo "==> 重新打包扩展编译产物 ..."
+if [ -f "$HOME/.pi/agent/compiled/update-extensions.sh" ]; then
   (cd "$HOME/.pi/agent/compiled" && bash update-extensions.sh --build-only) \
     || echo "    ⚠️  打包失败，可稍后手动: bash ~/.pi/agent/compiled/update-extensions.sh --build-only"
 else
-  echo "    无 bun 或缺少 update-extensions.sh，跳过打包"
+  echo "    缺少 update-extensions.sh，跳过打包"
   echo "    （compiled/ 已有备份产物，直接重启 pi 通常也能用）"
 fi
 

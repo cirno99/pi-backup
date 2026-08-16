@@ -25,7 +25,7 @@ echo "备份到: $DEST"
 
 # ------------------------------------------------------------
 # 1. 核心配置：~/.pi/agent 的子集
-#    排除：auth.json(登录凭据) / npm/(524M 可重装) / sessions/(对话历史)
+#    排除：auth.json(登录凭据) / npm/(约 110M 可重装，配方 bun.lock 单独备份) / sessions/(对话历史)
 #          state/ missions/ run-history.jsonl / 统计文件
 #    skills/ 下全是符号链接，先排除，恢复时自动重建（换用户名也有效）
 # ------------------------------------------------------------
@@ -50,11 +50,12 @@ rm -rf "$DEST/agent/skills"   # 防御：链接目录不进入备份
 sed -i "s|$HOME/.pi/agent|\$HOME/.pi/agent|g" "$DEST/agent/settings.json"
 
 # ------------------------------------------------------------
-# 2.5 保留 npm 重装配方（package.json + package-lock.json）
-#     node_modules 不备份（524M），换机后用 npm ci 按 lock 精确复现
+# 2.5 保留 bun 重装配方（package.json + bun.lock）
+#     node_modules 不备份（约 110M），换机后用 bun ci --omit=peer 按 lock 精确复现
+#     （npmCommand 已切换为 bun；--omit=peer 跳过 @earendil-works/pi-* 等由 pi 宿主注入的 peer 依赖）
 # ------------------------------------------------------------
 mkdir -p "$DEST/agent/npm"
-for f in package.json package-lock.json; do
+for f in package.json bun.lock; do
   [ -f "$AGENT_DIR/npm/$f" ] && cp "$AGENT_DIR/npm/$f" "$DEST/agent/npm/$f"
 done
 
@@ -82,8 +83,8 @@ print('\n'.join(cfg.get('packages', [])) or '(无)')
 PY
   echo
   echo "== 扩展复现配方（node_modules 不备份，靠配方重装）=="
-  echo "agent/npm/package.json + package-lock.json"
-  echo "恢复时: npm ci 重建 node_modules → update-extensions.sh 重新打包（需 bun）"
+  echo "agent/npm/package.json + bun.lock"
+  echo "恢复时: bun ci --omit=peer 重建 node_modules → update-extensions.sh 重新打包"
   echo
   echo "== 技能列表（由 skills-manager 管理，不在备份内，恢复后需重新安装）=="
   ls "$SKILLS_DIR" 2>/dev/null || echo '(无)'
@@ -91,7 +92,7 @@ PY
   echo "== 已排除内容 =="
   echo "私密:   agent/auth.json（登录凭据，恢复后需重新 /login）"
   echo "        agent/sessions/ agent/state/ agent/missions/ run-history.jsonl"
-  echo "可重建: agent/npm/（524M 的 node_modules；配方 package.json/lock 已备份，恢复时 npm ci 重建）"
+  echo "可重建: agent/npm/（约 110M 的 node_modules；配方 package.json/bun.lock 已备份，恢复时 bun ci --omit=peer 重建）"
   echo "技能:   全部技能（约 383M，含 .venv/ 虚拟环境与媒体素材），"
   echo "        由 skills-manager 应用管理，恢复后重新安装即可"
 } > "$DEST/manifest.txt"
