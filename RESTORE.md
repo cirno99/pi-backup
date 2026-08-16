@@ -26,7 +26,7 @@ PI_TAR=1 ./backup-pi.sh   # 生成 pi-config-<时间戳>.tar.gz
 备份内容：
 - **核心配置** `~/.pi/agent/` 的子集：`settings.json`、`AGENTS.md`、`pi-lsp.json`、
   `subagents.json`、`prompts/`、`extensions/`、`themes/`、`sounds/`、`compiled/`、`models-store.json`
-- **npm 重装配方** `agent/npm/` 下的 `package.json` + `package-lock.json`（node_modules 不备份）
+- **bun 重装配方** `agent/npm/` 下的 `package.json` + `bun.lock`（node_modules 不备份）
 
 隐私说明：
 - **已脱敏**：`settings.json` 里的绝对路径（如 `/home/用户名/.pi/agent/...`）备份时替换为 `$HOME` 占位符，恢复时自动还原；`settings.json.bak*` 历史备份不入库
@@ -36,7 +36,7 @@ PI_TAR=1 ./backup-pi.sh   # 生成 pi-config-<时间戳>.tar.gz
 **明确不备份**（防止泄露/缩小体积）：
 - `auth.json` —— OAuth 登录凭据（恢复后需重新 `/login`）
 - `sessions/`、`state/`、`missions/`、`run-history.jsonl` —— 会话/运行记录
-- `npm/node_modules`（约 524M）—— 不备份；`package.json` + `package-lock.json` 配方已备份，恢复时 `npm ci` 按 lock 精确复现，再跑 `update-extensions.sh` 重新打包
+- `npm/node_modules`（约 110M）—— 不备份；`package.json` + `bun.lock` 配方已备份，恢复时 `bun ci --omit=peer` 按 lock 精确复现，再跑 `update-extensions.sh` 重新打包
 - 技能内容（约 383M）—— 技能由 skills-manager 应用管理，不在备份内，恢复后重新安装
 
 ## 推送到 GitHub
@@ -63,7 +63,7 @@ curl https://mise.run | sh
 mise use -g pi@<manifest.txt 里的版本>
 mise use -g pi@<manifest.txt 里的版本> bun
 pi --version   # 确认可用
-bun --version  # 确认可用（扩展重新打包需要）
+bun --version  # 确认可用（重建 node_modules 与重新打包都需要）
 ```
 
 ### 执行恢复
@@ -84,9 +84,9 @@ tar xzf pi-config-<时间戳>.tar.gz
 3. 修正 `settings.json` 里扩展的绝对路径（换用户名也能用）
 4. 创建空的 `~/.pi/agent/skills/` 目录（技能由 skills-manager 重装）
 5. 重建扩展环境（node_modules 不备份，全部由配方重建）：
-   - 恢复 `agent/npm/` 的 `package.json`/`package-lock.json` 配方
+   - 恢复 `agent/npm/` 的 `package.json`/`bun.lock` 配方
    - `pi install` 注册 `settings.json` 里的包
-   - `npm ci` 按 lock 精确重建 `node_modules`（需联网，即那 524M 的来源）
+   - `bun ci --omit=peer` 按 lock 精确重建 `node_modules`（需联网；`--omit=peer` 跳过 @earendil-works/pi-* 等由 pi 宿主注入的 peer 依赖，与 pi 安装参数一致）
    - 跑 `update-extensions.sh --build-only` 用 bun 重新打包编译产物
 
 ### 恢复后手动操作
@@ -122,7 +122,8 @@ tar xzf pi-config-<时间戳>.tar.gz
 - **主题丢了？** 主题文件在备份的 `agent/themes/` 里，确认 `settings.json` 的
   `theme` 值与 `~/.pi/agent/themes/` 下的文件名一致。
 - **登录 provider 列表和原来不同？** 备份不含 `models-store.json` 之外的目录缓存，
-- **node_modules 怎么复现？** node_modules（约 524M）不备份，恢复脚本已自动完成复现：
-  `npm ci`（按备份的 `package-lock.json` 精确安装）→ `update-extensions.sh` 重新打包。
-  手动操作：`cd ~/.pi/agent/npm && npm ci && bash ~/.pi/agent/compiled/update-extensions.sh --build-only`
+- **node_modules 怎么复现？** node_modules（约 110M）不备份，恢复脚本已自动完成复现：
+  `bun ci --omit=peer`（按备份的 `bun.lock` 精确安装）→ `update-extensions.sh` 重新打包。
+  手动操作：`cd ~/.pi/agent/npm && bun ci --omit=peer && bash ~/.pi/agent/compiled/update-extensions.sh --build-only`
+- **为什么用 bun 而不是 npm？** `settings.json` 的 `npmCommand` 已切换为 `["bun"]`，pi 安装/更新扩展包时固定以 `bun install <specs> --cwd <root> --omit=peer` 执行（跳过 @earendil-works/pi-* 等由 pi 宿主注入的 peer 依赖，裸跑 `bun ci` 会额外装这些 peer，与 pi 管理状态不一致）。bun 自带全局缓存，重建极快；`bun ci` 与 `npm ci` 同为 frozen-lockfile 语义，不会改动 `bun.lock`。旧备份若只有 `package-lock.json`，恢复脚本会自动降级为 `bun install --omit=peer` 重新解析并生成 `bun.lock`。
   重新 `/login` 后会自动刷新；自定义 provider 请参考官方 docs 重新配置。
