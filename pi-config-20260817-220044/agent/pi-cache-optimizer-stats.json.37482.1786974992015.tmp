@@ -1,0 +1,424 @@
+{
+  "version": 6,
+  "sessions": {
+    "f1769ddbe41f54ba": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 35,
+        "hitRequests": 35,
+        "cachedInputTokens": 1705088,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 1750185
+      }
+    },
+    "81694ca3408c1c98": {
+      "opencode-go/kimi-k2.6": {
+        "day": "2026-08-16",
+        "totalRequests": 8,
+        "hitRequests": 8,
+        "cachedInputTokens": 57090,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 67443
+      }
+    },
+    "4c48b8c0ccb14f43": {
+      "opencode-go/kimi-k2.6": {
+        "day": "2026-08-16",
+        "totalRequests": 1,
+        "hitRequests": 0,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 7643
+      }
+    },
+    "10532a3a632f9f68": {
+      "opencode-go/kimi-k2.6": {
+        "day": "2026-08-16",
+        "totalRequests": 4,
+        "hitRequests": 4,
+        "cachedInputTokens": 34490,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 46736
+      }
+    },
+    "1f005b76003a4506": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 36,
+        "hitRequests": 35,
+        "cachedInputTokens": 1754752,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 1806361
+      }
+    },
+    "586b3997af13786c": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 3,
+        "hitRequests": 2,
+        "cachedInputTokens": 12160,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 30414
+      }
+    },
+    "5f07c5abdad2d7ee": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 4,
+        "hitRequests": 4,
+        "cachedInputTokens": 22144,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 44003
+      }
+    },
+    "85ea3e1b27f1c381": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 4,
+        "hitRequests": 4,
+        "cachedInputTokens": 33792,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 42806
+      }
+    },
+    "2dce40e0250e8f76": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 4,
+        "hitRequests": 4,
+        "cachedInputTokens": 32768,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 40759
+      }
+    },
+    "e2a8e673389e6f44": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 15,
+        "hitRequests": 15,
+        "cachedInputTokens": 296192,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 322820
+      }
+    },
+    "21572655b172a386": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 24,
+        "hitRequests": 24,
+        "cachedInputTokens": 637312,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 650443
+      }
+    },
+    "9c3282109b2f87f3": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 67,
+        "hitRequests": 67,
+        "cachedInputTokens": 3852800,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 3918810
+      }
+    },
+    "c0c01890900fb613": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 1,
+        "hitRequests": 1,
+        "cachedInputTokens": 10240,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 10354
+      }
+    },
+    "ec363db6b0092b09": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 6,
+        "hitRequests": 6,
+        "cachedInputTokens": 96640,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 113303
+      }
+    },
+    "4fa75d9debd7d466": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 1,
+        "hitRequests": 1,
+        "cachedInputTokens": 10240,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 10351
+      }
+    },
+    "2691f179bf4458af": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 2,
+        "hitRequests": 2,
+        "cachedInputTokens": 20480,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 23947
+      }
+    },
+    "0b5a3b0f18d875ec": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 14,
+        "hitRequests": 14,
+        "cachedInputTokens": 597888,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 638372
+      }
+    },
+    "754d805af6a7e08d": {
+      "sudocode/gpt-5.6-sol": {
+        "day": "2026-08-17",
+        "totalRequests": 1,
+        "hitRequests": 0,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 11831
+      }
+    },
+    "890fc1175b55e46f": {
+      "sudocode/gpt-5.6-sol": {
+        "day": "2026-08-17",
+        "totalRequests": 4,
+        "hitRequests": 1,
+        "cachedInputTokens": 10752,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 62291
+      },
+      "opencode/deepseek-v4-flash-free": {
+        "day": "2026-08-17",
+        "totalRequests": 1,
+        "hitRequests": 0,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 19570
+      }
+    },
+    "59860e8f717644e4": {
+      "opencode-go/mimo-v2.5": {
+        "day": "2026-08-17",
+        "totalRequests": 4,
+        "hitRequests": 3,
+        "cachedInputTokens": 34496,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 46922
+      },
+      "sudocode/gpt-5.6-sol": {
+        "day": "2026-08-17",
+        "totalRequests": 1,
+        "hitRequests": 0,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 12852
+      }
+    },
+    "3bfa487b8ab6716e": {
+      "sudocode/gpt-5.6-sol": {
+        "day": "2026-08-17",
+        "totalRequests": 1,
+        "hitRequests": 0,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 11786
+      }
+    },
+    "a03b3764dc9c001f": {
+      "opencode-go/mimo-v2.5": {
+        "day": "2026-08-17",
+        "totalRequests": 44,
+        "hitRequests": 43,
+        "cachedInputTokens": 2784256,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 2875359
+      }
+    },
+    "da988fb2d751f307": {
+      "commandcode/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 1,
+        "hitRequests": 0,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 0
+      }
+    },
+    "1f2a1f325360792e": {
+      "commandcode/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 1,
+        "hitRequests": 0,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 0
+      }
+    },
+    "72255ca2ceda776d": {
+      "commandcode/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 6,
+        "hitRequests": 0,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 0
+      }
+    },
+    "e7ccfe5c7623073e": {
+      "commandcode/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 1,
+        "hitRequests": 0,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 0
+      }
+    },
+    "cb5828d1c514b1a9": {
+      "commandcode/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 61,
+        "hitRequests": 5,
+        "cachedInputTokens": 504320,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 510210
+      }
+    },
+    "4a9faad118ff5dd6": {
+      "opencode-go/mimo-v2.5": {
+        "day": "2026-08-17",
+        "totalRequests": 14,
+        "hitRequests": 12,
+        "cachedInputTokens": 345536,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 425821
+      }
+    },
+    "69abb3f621463a27": {
+      "commandcode/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 7,
+        "hitRequests": 7,
+        "cachedInputTokens": 143616,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 187714
+      }
+    },
+    "91564f46b43e6a8e": {
+      "commandcode/mimo-v2.5-pro": {
+        "day": "2026-08-17",
+        "totalRequests": 1,
+        "hitRequests": 0,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 11355
+      }
+    },
+    "004676498359a329": {
+      "commandcode/deepseek-v4-flash": {
+        "day": "2026-08-17",
+        "totalRequests": 11,
+        "hitRequests": 11,
+        "cachedInputTokens": 128256,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 132652
+      }
+    },
+    "9d4946c94a572434": {}
+  },
+  "totalsByModel": {
+    "opencode-go/deepseek-v4-flash": {
+      "day": "2026-08-17",
+      "totalRequests": 86,
+      "hitRequests": 86,
+      "cachedInputTokens": 4246144,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 4340478
+    },
+    "opencode-go/kimi-k2.6": {
+      "day": "2026-08-17",
+      "totalRequests": 0,
+      "hitRequests": 0,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 0
+    },
+    "sudocode/gpt-5.6-sol": {
+      "day": "2026-08-17",
+      "totalRequests": 7,
+      "hitRequests": 1,
+      "cachedInputTokens": 10752,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 98760
+    },
+    "opencode/deepseek-v4-flash-free": {
+      "day": "2026-08-17",
+      "totalRequests": 1,
+      "hitRequests": 0,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 19570
+    },
+    "opencode-go/mimo-v2.5": {
+      "day": "2026-08-17",
+      "totalRequests": 41,
+      "hitRequests": 39,
+      "cachedInputTokens": 2202112,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 2303060
+    },
+    "commandcode/deepseek-v4-flash": {
+      "day": "2026-08-17",
+      "totalRequests": 86,
+      "hitRequests": 22,
+      "cachedInputTokens": 762368,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 816318
+    },
+    "commandcode/mimo-v2.5-pro": {
+      "day": "2026-08-17",
+      "totalRequests": 1,
+      "hitRequests": 0,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 11355
+    }
+  },
+  "legacyFamily": {
+    "deepseek": {
+      "day": "2026-08-17",
+      "totalRequests": 0,
+      "hitRequests": 0,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 0
+    },
+    "openai": {
+      "day": "2026-08-17",
+      "totalRequests": 0,
+      "hitRequests": 0,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 0
+    },
+    "claude": {
+      "day": "2026-08-17",
+      "totalRequests": 0,
+      "hitRequests": 0,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 0
+    },
+    "gemini": {
+      "day": "2026-08-17",
+      "totalRequests": 0,
+      "hitRequests": 0,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 0
+    }
+  }
+}
