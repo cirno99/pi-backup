@@ -1,0 +1,120 @@
+{
+  "version": 6,
+  "sessions": {
+    "7f65e8571eca13b8": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 29,
+        "hitRequests": 28,
+        "cachedInputTokens": 1117568,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 1164352
+      }
+    },
+    "fe62ef594d4b8d23": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 1,
+        "hitRequests": 1,
+        "cachedInputTokens": 10368,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 10971
+      }
+    },
+    "0f6cd12f946f9161": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 29,
+        "hitRequests": 29,
+        "cachedInputTokens": 1623040,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 1692668
+      }
+    },
+    "72c45bf790c11e6b": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 13,
+        "hitRequests": 12,
+        "cachedInputTokens": 247296,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 275603
+      }
+    },
+    "04e9121d08efdde3": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 7,
+        "hitRequests": 7,
+        "cachedInputTokens": 83840,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 88803
+      }
+    },
+    "4d52874eed763865": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 66,
+        "hitRequests": 66,
+        "cachedInputTokens": 5019648,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 5105900
+      }
+    },
+    "3b7fab8a9447fa1c": {
+      "opencode-go/deepseek-v4-flash": {
+        "day": "2026-08-16",
+        "totalRequests": 23,
+        "hitRequests": 23,
+        "cachedInputTokens": 680704,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 710877
+      }
+    },
+    "dff063b7364cee09": {}
+  },
+  "totalsByModel": {
+    "opencode-go/deepseek-v4-flash": {
+      "day": "2026-08-16",
+      "totalRequests": 155,
+      "hitRequests": 154,
+      "cachedInputTokens": 8535168,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 8773571
+    }
+  },
+  "legacyFamily": {
+    "deepseek": {
+      "day": "2026-08-16",
+      "totalRequests": 0,
+      "hitRequests": 0,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 0
+    },
+    "openai": {
+      "day": "2026-08-16",
+      "totalRequests": 0,
+      "hitRequests": 0,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 0
+    },
+    "claude": {
+      "day": "2026-08-16",
+      "totalRequests": 0,
+      "hitRequests": 0,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 0
+    },
+    "gemini": {
+      "day": "2026-08-16",
+      "totalRequests": 0,
+      "hitRequests": 0,
+      "cachedInputTokens": 0,
+      "cacheWriteInputTokens": 0,
+      "totalInputTokens": 0
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "lastChangelogVersion": "0.84.2",
+  "theme": "catppuccin-macchiato",
+  "hideThinkingBlock": true,
+  "defaultProjectTrust": "ask",
+  "defaultProvider": "commandcode",
+  "defaultModel": "mimo-v2.5-pro",
+  "defaultThinkingLevel": "high",
+  "npmCommand": [
+    "bun"
+  ],
+  "packages": [
+    "npm:@ff-labs/pi-fff",
+    "npm:pi-context-usage",
+    "npm:@tifan/pi-preferred-thinking",
+    "npm:pi-workspace-history",
+    "npm:pi-init",
+    "npm:pi-session-name",
+    "npm:pi-md-export"
+  ],
+  "showHardwareCursor": true,
+  "enabledModels": [],
+  "doubleEscapeAction": "tree",
+  "observational-memory": {
+    "compactAfterTokensMode": "ratio",
+    "compactAfterTokensRatio": 0.5
+  },
+  "treeFilterMode": "all",
+  "readseek": {
+    "overrideTools": [
+      "read",
+      "edit",
+      "write"
+    ]
+  },
+  "extensions": [
+    "$HOME/.pi/agent/compiled/pi-statusline.js",
+    "$HOME/.pi/agent/compiled/pi-readseek.js",
+    "$HOME/.pi/agent/compiled/pi-observational-memory.js",
+    "$HOME/.pi/agent/compiled/@tintinweb-pi-subagents.js",
+    "$HOME/.pi/agent/compiled/@juicesharp-rpiv-web-tools.js",
+    "$HOME/.pi/agent/compiled/pi-rtk-optimizer.js",
+    "$HOME/.pi/agent/compiled/@juicesharp-rpiv-ask-user-question.js",
+    "$HOME/.pi/agent/compiled/@narumitw-pi-btw.js",
+    "$HOME/.pi/agent/compiled/@narumitw-pi-lsp.js",
+    "$HOME/.pi/agent/compiled/pi-cache-optimizer.js"
+  ]
+}
