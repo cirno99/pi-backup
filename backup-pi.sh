@@ -12,6 +12,7 @@ set -euo pipefail
 
 BACKUP_ROOT="${PI_BACKUP_ROOT:-$HOME/pi-backup}"
 DEST="$BACKUP_ROOT/pi-config-$(date +%Y%m%d-%H%M%S)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 AGENT_DIR="$HOME/.pi/agent"
 SKILLS_DIR="$HOME/.skills-manager/skills"
@@ -25,22 +26,12 @@ echo "备份到: $DEST"
 
 # ------------------------------------------------------------
 # 1. 核心配置：~/.pi/agent 的子集
-#    排除：auth.json(登录凭据) / npm/(约 110M 可重装，配方 bun.lock 单独备份) / sessions/(对话历史)
-#          state/ missions/ run-history.jsonl / 统计文件
+#    排除规则集中在同目录的 excludes.txt（rsync --exclude-from 格式），
+#    增删规则只改文件，不用动脚本
 #    skills/ 下全是符号链接，先排除，恢复时自动重建（换用户名也有效）
 # ------------------------------------------------------------
 echo "==> 复制核心配置 ..."
-rsync -a "$AGENT_DIR/" "$DEST/agent/" \
-  --exclude 'auth.json' \
-  --exclude 'npm/' \
-  --exclude 'sessions/' \
-  --exclude 'state/' \
-  --exclude 'missions/' \
-  --exclude 'run-history.jsonl' \
-  --exclude 'pi-cache-optimizer-stats.json' \
-  --exclude 'settings.json.bak*' \
-  --exclude 'skills/' \
-  --exclude 'compiled/node_modules'   # 0 字节符号链接，打包时会自动重建
+rsync -a "$AGENT_DIR/" "$DEST/agent/" --exclude-from="$SCRIPT_DIR/excludes.txt"
 rm -rf "$DEST/agent/skills"   # 防御：链接目录不进入备份
 
 # ------------------------------------------------------------
@@ -91,7 +82,7 @@ PY
   echo
   echo "== 已排除内容 =="
   echo "私密:   agent/auth.json（登录凭据，恢复后需重新 /login）"
-  echo "        agent/sessions/ agent/state/ agent/missions/ run-history.jsonl"
+  echo "        agent/sessions/ agent/pi-sessions-extracted/ agent/state/ agent/missions/ run-history.jsonl"
   echo "可重建: agent/npm/（约 110M 的 node_modules；配方 package.json/bun.lock 已备份，恢复时 bun ci --omit=peer 重建）"
   echo "技能:   全部技能（约 383M，含 .venv/ 虚拟环境与媒体素材），"
   echo "        由 skills-manager 应用管理，恢复后重新安装即可"
@@ -102,6 +93,7 @@ PY
 # ------------------------------------------------------------
 echo "==> 生成恢复说明副本"
 cp "$(dirname "$0")/RESTORE.md" "$DEST/RESTORE.md" 2>/dev/null || true
+cp "$SCRIPT_DIR/excludes.txt" "$DEST/excludes.txt" 2>/dev/null || true
 cp "$(dirname "$0")/restore-pi.sh" "$DEST/restore-pi.sh" 2>/dev/null || true
 chmod +x "$DEST/restore-pi.sh" 2>/dev/null || true
 
