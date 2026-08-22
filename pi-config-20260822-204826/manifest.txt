@@ -1,0 +1,48 @@
+pi 配置备份清单
+=================
+备份时间: 2026-08-22 20:48:26
+用户名路径: 已脱敏（settings.json 内 $HOME 占位，restore 时还原）
+pi 版本:  0.84.2
+
+== 安装的 pi 包（恢复时 pi install 重装）==
+npm:@ff-labs/pi-fff
+npm:pi-context-usage
+npm:@tifan/pi-preferred-thinking
+npm:pi-workspace-history
+npm:pi-init
+npm:pi-session-name
+npm:pi-md-export
+
+== 扩展复现配方（node_modules 不备份，靠配方重装）==
+agent/npm/package.json + bun.lock
+恢复时: bun ci --omit=peer 重建 node_modules → update-extensions.sh 重新打包
+
+== 技能列表（由 skills-manager 管理，不在备份内，恢复后需重新安装）==
+a-stock-data
+chanlun-trading-system
+codebase-design
+code-review
+dart-best-practices
+dart-modern-features
+dart-test-fundamentals
+darwin-skill
+gaopanlezhechenhuan-perspective
+huashu-nuwa
+ima-skill
+karpathy-coder
+larry-williams-short-term
+mikelangjirui-perspective
+rust-best-practices
+socratic-coach
+tdd
+youzi-zhinangtuan
+zettaranc-perspective
+zig-best-practices
+zuoshou-ayi-perspective
+
+== 已排除内容 ==
+私密:   agent/auth.json（登录凭据，恢复后需重新 /login）
+        agent/sessions/ agent/pi-sessions-extracted/ agent/state/ agent/missions/ run-history.jsonl
+可重建: agent/npm/（约 110M 的 node_modules；配方 package.json/bun.lock 已备份，恢复时 bun ci --omit=peer 重建）
+技能:   全部技能（约 383M，含 .venv/ 虚拟环境与媒体素材），
+        由 skills-manager 应用管理，恢复后重新安装即可

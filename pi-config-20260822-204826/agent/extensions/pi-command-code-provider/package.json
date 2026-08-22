@@ -1,0 +1,14 @@
+{
+  "name": "pi-command-code-provider",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Command Code OpenAI-compatible LLM provider for pi（本地维护版，自 codeberg.org/jr2804/pi-command-code-provider 剥离）",
+  "license": "MIT",
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "pi": {
+    "extensions": []
+  }
+}
