@@ -1,0 +1,35 @@
+{
+  "version": 7,
+  "kind": "pi-cache-optimizer-shard",
+  "instanceId": "00ecc9d0-acce-4dc2-a9f7-3565012aee3c",
+  "sessionHash": "3ec3a735935e184e",
+  "process": {
+    "pid": 2084,
+    "ppid": 1606,
+    "instanceStartedAt": 1787414260612
+  },
+  "lifecycle": {
+    "state": "active",
+    "createdAt": 1787414459298,
+    "updatedAt": 1787417523316
+  },
+  "day": "2026-08-23",
+  "globalEpoch": "initial:global",
+  "models": {
+    "opencode-go/deepseek-v4-flash": {
+      "modelEpoch": "initial:model:opencode-go/deepseek-v4-flash",
+      "provider": "opencode-go",
+      "modelId": "deepseek-v4-flash",
+      "modelName": "DeepSeek V4 Flash",
+      "api": "openai-completions",
+      "stats": {
+        "day": "2026-08-23",
+        "totalRequests": 166,
+        "hitRequests": 164,
+        "cachedInputTokens": 16097280,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 16287279
+      }
+    }
+  }
+}

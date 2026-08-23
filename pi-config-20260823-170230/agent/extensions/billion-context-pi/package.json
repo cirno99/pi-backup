@@ -1,0 +1,72 @@
+{
+	"name": "billion-context-pi",
+	"version": "0.1.46-local.1",
+	"description": "本地维护版 billion-context-pi（Zig 内核模式）：bun:ffi + acp-kernel-zig，源码维护在 ~/.pi/agent/extensions/，由 update-extensions.sh 重建并注册到 compiled/。",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"pi": {
+		"extensions": []
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
+	"sideEffects": false,
+	"homepage": "https://github.com/ranxianglei/billion-context-pi",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ranxianglei/billion-context-pi.git"
+	},
+	"bugs": {
+		"url": "https://github.com/ranxianglei/billion-context-pi/issues"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"scripts": {
+		"test": "node --import tsx --test tests/*.test.ts",
+		"typecheck": "tsc --noEmit",
+		"build": "tsup && tsc --emitDeclarationOnly",
+		"e2e": "node scripts/e2e/run-e2e.mjs"
+	},
+	"keywords": [
+		"pi",
+		"acp",
+		"context",
+		"compression",
+		"context-management",
+		"llm",
+		"pi-package"
+	],
+	"author": "ranxianglei",
+	"license": "MIT",
+	"type": "module",
+	"peerDependencies": {
+		"@earendil-works/pi-coding-agent": "*",
+		"typebox": "*"
+	},
+	"devDependencies": {
+		"@earendil-works/pi-coding-agent": "0.83.0",
+		"@types/node": "^26.1.2",
+		"acp-kernel": "file:/home/cirno99/Code/TypeScript/billion-context-pi-zig/acp-kernel-zig",
+		"tsup": "^8.5.1",
+		"tsx": "^4.23.1",
+		"typescript": "^7.0.2"
+	},
+	"allowScripts": {
+		"esbuild@0.27.7": true,
+		"esbuild@0.28.1": true,
+		"@google/genai@1.52.0": true,
+		"protobufjs@7.6.5": true
+	}
+}

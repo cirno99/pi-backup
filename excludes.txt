@@ -11,9 +11,14 @@ missions/
 run-history.jsonl
 pi-cache-optimizer-stats.json
 
-# --- 可重建内容（node_modules 约 110M；配方 package.json/bun.lock 单独备份）---
+# --- 可重建内容（node_modules 合计约 380M；配方 package.json/bun.lock 单独备份）---
 npm/
 compiled/node_modules
+# 扩展构建依赖：extensions/*/node_modules（约 270M），纯构建期依赖——运行时 compiled bundle
+# 已内联全部依赖（仅 external acp-kernel 与 pi 宿主注入的 @earendil-works/pi-coding-agent），
+# 恢复后 update-extensions.sh 的链接步骤会 mkdir -p 重建 acp-kernel 链接
+# 链接本身（extensions/billion-context-pi/node_modules/acp-kernel → 内核项目）会随目录排除，勿担心
+extensions/*/node_modules
 
 # --- 备份残留 ---
 settings.json.bak*

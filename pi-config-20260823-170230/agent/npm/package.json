@@ -1,0 +1,22 @@
+{
+  "name": "pi-extensions",
+  "private": true,
+  "dependencies": {
+    "@ff-labs/pi-fff": "^0.10.5",
+    "@juicesharp/rpiv-ask-user-question": "^2.7.0",
+    "@juicesharp/rpiv-web-tools": "^2.7.0",
+    "@narumitw/pi-btw": "^0.51.0",
+    "@narumitw/pi-lsp": "^0.49.5",
+    "@tifan/pi-preferred-thinking": "^0.3.0",
+    "billion-context-pi": "^0.1.46",
+    "diff": "9.0.0",
+    "pi-cache-optimizer": "^2.8.5",
+    "pi-context-usage": "^1.0.2",
+    "pi-init": "^1.0.0",
+    "pi-md-export": "^0.4.1",
+    "pi-readseek": "^0.9.14",
+    "pi-rtk-optimizer": "^0.9.0",
+    "pi-session-name": "^0.1.2",
+    "pi-workspace-history": "^0.2.2"
+  }
+}

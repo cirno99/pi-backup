@@ -1,0 +1,20 @@
+{
+  "version": 7,
+  "kind": "pi-cache-optimizer-shard",
+  "instanceId": "7a47ed8f-0b9a-47b7-9553-12d2b354813b",
+  "sessionHash": "ec0e3a7eefda11e8",
+  "process": {
+    "pid": 219386,
+    "ppid": 28487,
+    "instanceStartedAt": 1787475281725
+  },
+  "lifecycle": {
+    "state": "closed",
+    "createdAt": 1787475281725,
+    "updatedAt": 1787475288681,
+    "closedAt": 1787475288681
+  },
+  "day": "2026-08-23",
+  "globalEpoch": "initial:global",
+  "models": {}
+}

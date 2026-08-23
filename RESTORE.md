@@ -30,6 +30,7 @@ PI_TAR=1 ./backup-pi.sh   # 生成 pi-config-<时间戳>.tar.gz
   `pi-cache-optimizer-stats.d/`（pi-cache-optimizer 统计分片）
 - **bun 重装配方** `agent/npm/` 下的 `package.json` + `bun.lock`（node_modules 不备份）
 - **ACP 全局配置** `~/.pi/acp.json`（billion-context-pi 全局配置，在 agent 目录外，有则备份到产物根目录）
+- **Zig 内核产物** `acp-kernel-zig/`（billion-context-pi 的原生内核**产物，不含源码**：`native/zig-out/lib/libacp_kernel.so` + `dist/` TS 封装层；换机后无需重新 `zig build` 即可保持 Zig 原生内核模式。源码在 GitHub 仓库，需要重建时才 clone）
 
 隐私说明：
 - **已脱敏**：`settings.json` 里的绝对路径（如 `/home/用户名/.pi/agent/...`）备份时替换为 `$HOME` 占位符，恢复时自动还原；`settings.json.bak*` 历史备份不入库
@@ -40,7 +41,9 @@ PI_TAR=1 ./backup-pi.sh   # 生成 pi-config-<时间戳>.tar.gz
 - `auth.json` —— OAuth 登录凭据（恢复后需重新 `/login`）
 - `sessions/`、`state/`、`missions/`、`run-history.jsonl` —— 会话/运行记录
 - `npm/node_modules`（约 110M）—— 不备份；`package.json` + `bun.lock` 配方已备份，恢复时 `bun ci --omit=peer` 按 lock 精确复现，再跑 `update-extensions.sh` 重新打包
+- `extensions/*/node_modules`（约 270M）—— 扩展构建依赖，纯构建期：运行时 `compiled` bundle 已内联全部依赖（仅 external `acp-kernel`、`acp-kernel/panel` 与 pi 宿主注入的 `@earendil-works/pi-coding-agent`），恢复时 `update-extensions.sh` 会 `mkdir -p` 并重建 `acp-kernel` 链接，无需备份
 - 技能内容（约 383M）—— 技能由 skills-manager 应用管理，不在备份内，恢复后重新安装
+- `acp-kernel-zig/` 的 `src/`、`tests/`、配置文件、`node_modules`、`.zig-cache`、`.git` —— 内核项目只备份原生产物（`native/zig-out` + `dist/`），**源码与构建环境整体不备份**（源码在 GitHub 仓库，需重建/改动时才 clone）；运行时缺 `@anthropic-ai/tokenizer` 会自动降级为默认 token 计数
 - `acp.log`、`acp-state/` —— ACP（billion-context-pi）运行日志与状态，不备份（已加入排除清单；`~/.pi/acp.log` 在本机 ~/.pi 根目录，防其写入 agent 目录的 `acp-state/` 一并排除）
 
 ## 推送到 GitHub
@@ -88,7 +91,10 @@ tar xzf pi-config-<时间戳>.tar.gz
 3. 还原 `~/.pi/acp.json`（billion-context-pi 全局配置；备份中无此文件则跳过）
 4. 修正 `settings.json` 里扩展的绝对路径（换用户名也能用）
 5. 创建空的 `~/.pi/agent/skills/` 目录（技能由 skills-manager 重装）
-6. 重建扩展环境（node_modules 不备份，全部由配方重建）：
+6. 还原 Zig 内核产物 `acp-kernel-zig/` 到 `~/Code/TypeScript/billion-context-pi-zig/acp-kernel-zig/`
+   （备份含此目录时；只含 native/zig-out 产物与 dist 封装层，**不含源码**。旧备份无则跳过，
+    build 时回退 npm 包内联的旧 TS 内核）
+7. 重建扩展环境（node_modules 不备份，全部由配方重建）：
    - 恢复 `agent/npm/` 的 `package.json`/`bun.lock` 配方
    - `pi install` 注册 `settings.json` 里的包
    - `bun ci --omit=peer` 按 lock 精确重建 `node_modules`（需联网；`--omit=peer` 跳过 @earendil-works/pi-* 等由 pi 宿主注入的 peer 依赖，与 pi 安装参数一致）
@@ -131,4 +137,5 @@ tar xzf pi-config-<时间戳>.tar.gz
   `bun ci --omit=peer`（按备份的 `bun.lock` 精确安装）→ `update-extensions.sh` 重新打包。
   手动操作：`cd ~/.pi/agent/npm && bun ci --omit=peer && bash ~/.pi/agent/compiled/update-extensions.sh --build-only`
 - **为什么用 bun 而不是 npm？** `settings.json` 的 `npmCommand` 已切换为 `["bun"]`，pi 安装/更新扩展包时固定以 `bun install <specs> --cwd <root> --omit=peer` 执行（跳过 @earendil-works/pi-* 等由 pi 宿主注入的 peer 依赖，裸跑 `bun ci` 会额外装这些 peer，与 pi 管理状态不一致）。bun 自带全局缓存，重建极快；`bun ci` 与 `npm ci` 同为 frozen-lockfile 语义，不会改动 `bun.lock`。旧备份若只有 `package-lock.json`，恢复脚本会自动降级为 `bun install --omit=peer` 重新解析并生成 `bun.lock`。
+- **换 CPU 架构后内核原生库报错？** 备份里的 `native/zig-out/lib/libacp_kernel.so` 按备份机的 CPU 架构编译（x86_64 / aarch64 不通用），且**备份只含产物不含源码**。换架构机器恢复后：先 clone 内核源码覆盖产物目录（`git clone <内核仓库> ~/Code/TypeScript/billion-context-pi-zig/acp-kernel-zig`，会覆盖还原的产物），再 `cd ~/Code/TypeScript/billion-context-pi-zig/acp-kernel-zig && rm -rf native/zig-out && zig build`（需先安装 zig，见内核项目 README）；或设 `BUILD_KERNEL=1 bash ~/.pi/agent/compiled/update-extensions.sh --build-only` 由脚本自动重建。
   重新 `/login` 后会自动刷新；自定义 provider 请参考官方 docs 重新配置。
