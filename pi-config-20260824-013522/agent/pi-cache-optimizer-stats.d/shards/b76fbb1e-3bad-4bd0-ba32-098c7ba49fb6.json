@@ -1,0 +1,36 @@
+{
+  "version": 7,
+  "kind": "pi-cache-optimizer-shard",
+  "instanceId": "b76fbb1e-3bad-4bd0-ba32-098c7ba49fb6",
+  "sessionHash": "dc7cfa7bbfc84df3",
+  "process": {
+    "pid": 225136,
+    "ppid": 28540,
+    "instanceStartedAt": 1787475758553
+  },
+  "lifecycle": {
+    "state": "closed",
+    "createdAt": 1787475758553,
+    "updatedAt": 1787475867015,
+    "closedAt": 1787475867015
+  },
+  "day": "2026-08-23",
+  "globalEpoch": "initial:global",
+  "models": {
+    "command-code/deepseek/deepseek-v4-flash": {
+      "modelEpoch": "initial:model:command-code/deepseek/deepseek-v4-flash",
+      "provider": "command-code",
+      "modelId": "deepseek/deepseek-v4-flash",
+      "modelName": "DeepSeek V4 Flash (latest)",
+      "api": "openai-completions",
+      "stats": {
+        "day": "2026-08-23",
+        "totalRequests": 9,
+        "hitRequests": 8,
+        "cachedInputTokens": 146944,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 168895
+      }
+    }
+  }
+}

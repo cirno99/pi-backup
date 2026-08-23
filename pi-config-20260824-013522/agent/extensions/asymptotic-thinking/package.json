@@ -1,0 +1,26 @@
+{
+  "name": "asymptotic-thinking",
+  "version": "1.0.0",
+  "description": "渐近式思考框架（bun 兼容版）：六态状态机引导结构化分阶段深度推理",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "bun run build.ts",
+    "typecheck": "bunx tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*",
+    "@earendil-works/pi-ai": "*",
+    "typebox": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "0.84.2",
+    "@earendil-works/pi-tui": "0.84.2",
+    "@earendil-works/pi-ai": "0.84.2",
+    "typebox": "1.3.7",
+    "@types/bun": "latest",
+    "typescript": "^5.8.0"
+  }
+}

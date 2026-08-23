@@ -1,0 +1,19 @@
+pi 配置备份清单
+=================
+备份时间: 2026-08-24 01:35:22
+用户名路径: 已脱敏（settings.json 内 $HOME 占位，restore 时还原）
+pi 版本:  0.84.2
+
+== 安装的 pi 包（恢复时 pi install 重装）==
+npm:@ff-labs/pi-fff
+npm:pi-context-usage
+npm:@tifan/pi-preferred-thinking
+npm:pi-workspace-history
+npm:pi-init
+npm:pi-session-name
+npm:pi-md-export
+
+== 扩展复现配方（node_modules 不备份，靠配方重装）==
+agent/npm/package.json + bun.lock
+恢复时: bun ci --omit=peer 重建 node_modules → update-extensions.sh 重新打包
+

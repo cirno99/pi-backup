@@ -1,0 +1,51 @@
+{
+  "version": 7,
+  "kind": "pi-cache-optimizer-shard",
+  "instanceId": "2089eb21-fd78-4e1b-b2f2-1be3f0e123e1",
+  "sessionHash": "ce6f4e62c864fb82",
+  "process": {
+    "pid": 3219,
+    "ppid": 2892,
+    "instanceStartedAt": 1787449859528
+  },
+  "lifecycle": {
+    "state": "closed",
+    "createdAt": 1787449859528,
+    "updatedAt": 1787450345489,
+    "closedAt": 1787450345489
+  },
+  "day": "2026-08-23",
+  "globalEpoch": "initial:global",
+  "models": {
+    "command-code/meta/muse-spark-1.2-contributor": {
+      "modelEpoch": "initial:model:command-code/meta/muse-spark-1.2-contributor",
+      "provider": "command-code",
+      "modelId": "meta/muse-spark-1.2-contributor",
+      "modelName": "Muse Spark 1.2 Contributor",
+      "api": "openai-completions",
+      "stats": {
+        "day": "2026-08-23",
+        "totalRequests": 17,
+        "hitRequests": 17,
+        "cachedInputTokens": 373441,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 446845
+      }
+    },
+    "opencode-go/deepseek-v4-flash": {
+      "modelEpoch": "initial:model:opencode-go/deepseek-v4-flash",
+      "provider": "opencode-go",
+      "modelId": "deepseek-v4-flash",
+      "modelName": "DeepSeek V4 Flash",
+      "api": "openai-completions",
+      "stats": {
+        "day": "2026-08-23",
+        "totalRequests": 47,
+        "hitRequests": 46,
+        "cachedInputTokens": 2020352,
+        "cacheWriteInputTokens": 0,
+        "totalInputTokens": 2068840
+      }
+    }
+  }
+}
