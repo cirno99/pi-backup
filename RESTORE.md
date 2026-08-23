@@ -10,7 +10,7 @@
 | `backup-pi.sh` | 备份脚本（生成新的备份产物） |
 | `restore-pi.sh` | 恢复脚本（放入备份产物中，随备份一起入库） |
 | `RESTORE.md` | 本文档 |
-| `pi-config-<时间戳>/` | 备份产物（含 `agent/`、`manifest.txt`、`RESTORE.md`） |
+| `pi-config-<时间戳>/` | 备份产物（含 `agent/`、`manifest.txt`、`RESTORE.md`、`restore-pi.sh`、`excludes.txt`、可选的 `acp.json`） |
 
 ## 备份
 
@@ -25,8 +25,11 @@ PI_TAR=1 ./backup-pi.sh   # 生成 pi-config-<时间戳>.tar.gz
 
 备份内容：
 - **核心配置** `~/.pi/agent/` 的子集：`settings.json`、`AGENTS.md`、`pi-lsp.json`、
-  `subagents.json`、`prompts/`、`extensions/`、`themes/`、`sounds/`、`compiled/`、`models-store.json`
+  `subagents.json`、`prompts/`、`extensions/`、`themes/`、`compiled/`、`models-store.json`，
+  以及随运行产生的 `fff/`（pi-fff 索引缓存）、`git/`（各扩展 git 状态缓存）、
+  `pi-cache-optimizer-stats.d/`（pi-cache-optimizer 统计分片）
 - **bun 重装配方** `agent/npm/` 下的 `package.json` + `bun.lock`（node_modules 不备份）
+- **ACP 全局配置** `~/.pi/acp.json`（billion-context-pi 全局配置，在 agent 目录外，有则备份到产物根目录）
 
 隐私说明：
 - **已脱敏**：`settings.json` 里的绝对路径（如 `/home/用户名/.pi/agent/...`）备份时替换为 `$HOME` 占位符，恢复时自动还原；`settings.json.bak*` 历史备份不入库
@@ -38,6 +41,7 @@ PI_TAR=1 ./backup-pi.sh   # 生成 pi-config-<时间戳>.tar.gz
 - `sessions/`、`state/`、`missions/`、`run-history.jsonl` —— 会话/运行记录
 - `npm/node_modules`（约 110M）—— 不备份；`package.json` + `bun.lock` 配方已备份，恢复时 `bun ci --omit=peer` 按 lock 精确复现，再跑 `update-extensions.sh` 重新打包
 - 技能内容（约 383M）—— 技能由 skills-manager 应用管理，不在备份内，恢复后重新安装
+- `acp.log`、`acp-state/` —— ACP（billion-context-pi）运行日志与状态，不备份（已加入排除清单；`~/.pi/acp.log` 在本机 ~/.pi 根目录，防其写入 agent 目录的 `acp-state/` 一并排除）
 
 ## 推送到 GitHub
 
@@ -81,9 +85,10 @@ tar xzf pi-config-<时间戳>.tar.gz
 恢复脚本会自动完成：
 1. 把已有 `~/.pi` 移走（防覆盖，可随时删掉 `~/.pi.bak.*`）
 2. 复制核心配置到 `~/.pi/agent/`
-3. 修正 `settings.json` 里扩展的绝对路径（换用户名也能用）
-4. 创建空的 `~/.pi/agent/skills/` 目录（技能由 skills-manager 重装）
-5. 重建扩展环境（node_modules 不备份，全部由配方重建）：
+3. 还原 `~/.pi/acp.json`（billion-context-pi 全局配置；备份中无此文件则跳过）
+4. 修正 `settings.json` 里扩展的绝对路径（换用户名也能用）
+5. 创建空的 `~/.pi/agent/skills/` 目录（技能由 skills-manager 重装）
+6. 重建扩展环境（node_modules 不备份，全部由配方重建）：
    - 恢复 `agent/npm/` 的 `package.json`/`bun.lock` 配方
    - `pi install` 注册 `settings.json` 里的包
    - `bun ci --omit=peer` 按 lock 精确重建 `node_modules`（需联网；`--omit=peer` 跳过 @earendil-works/pi-* 等由 pi 宿主注入的 peer 依赖，与 pi 安装参数一致）
