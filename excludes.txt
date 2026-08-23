@@ -34,3 +34,6 @@ skills/
 acp.log
 acp.log.*
 acp-state/
+
+# --- fff 工具运行时索引（frecency/history 的 LMDB 数据库，属运行时状态，不备份）---
+fff/
