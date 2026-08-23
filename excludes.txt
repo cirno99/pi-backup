@@ -22,6 +22,10 @@ extensions/*/node_modules
 
 # --- 备份残留 ---
 settings.json.bak*
+extension-global.db
+extension-global.db-shm
+extension-global.db-wal
+# （extension-global.db 为扩展全局状态 SQLite 数据库，含 -shm/-wal 伴生文件，一并排除）
 
 # --- 技能（~/.pi/agent/skills 是指向 ~/.skills-manager/skills 的符号链接，由 skills-manager 管理）---
 skills/
