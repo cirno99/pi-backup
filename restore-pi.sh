@@ -85,25 +85,11 @@ else
   echo "==> 未检测到 skills-manager（桌面应用），技能恢复方式见 RESTORE.md"
 fi
 # ------------------------------------------------------------
-# 4b. 还原 billion-context-pi Zig 内核项目（acp-kernel-zig）
-#     备份含 acp-kernel-zig/ 时还原到 $ACP_KERNEL_ZIG 默认路径
-#     （$HOME/Code/TypeScript/billion-context-pi-zig/acp-kernel-zig），
-#     与 update-extensions.sh 的默认内核路径一致，且必须在打包步骤之前（build 依赖它）
-#     旧备份无此目录则跳过（build 会回退 npm 包内联的旧 TS 内核）
 # ------------------------------------------------------------
-if [ -d "$SRC/acp-kernel-zig" ]; then
-  KERNEL_ZIG_DIR="${ACP_KERNEL_ZIG:-$HOME/Code/TypeScript/billion-context-pi-zig/acp-kernel-zig}"
-  if [ -e "$KERNEL_ZIG_DIR" ] && [ -n "$(ls -A "$KERNEL_ZIG_DIR" 2>/dev/null || true)" ]; then
-    KBAK="$KERNEL_ZIG_DIR.bak.$(date +%s)"
-    mv "$KERNEL_ZIG_DIR" "$KBAK"
-    echo "ℹ️  已把现有内核项目移到 $KBAK（可随时删掉）"
-  fi
-  mkdir -p "$(dirname "$KERNEL_ZIG_DIR")"
-  rsync -a "$SRC/acp-kernel-zig/" "$KERNEL_ZIG_DIR/"
-  echo "==> 已还原 Zig 内核项目到 $KERNEL_ZIG_DIR"
-else
-  echo "==> 备份中无 acp-kernel-zig/（旧备份），跳过——build 将回退 npm 包旧 TS 内核"
-fi
+# 4b. billion-context-pi Zig 内核项目（acp-kernel-zig）不还原
+#     备份不再包含内核项目；内核由 GitHub 仓库 clone + zig build 重建（见 RESTORE.md），
+#     缺失时 update-extensions.sh 自动回退 npm 包内联的旧 TS 内核（功能可用，无 Zig 原生加速）。
+# ------------------------------------------------------------
 
 # ------------------------------------------------------------
 # 5. 重建扩展环境：node_modules + 编译产物
@@ -171,9 +157,8 @@ cat <<EOF
        done
 5. 各项目目录下的项目级配置（.pi/settings.json 等）请自行复制
 6. 检查恢复效果: pi 里执行 /settings 和 /theme
-7. 若换过 CPU 架构（如 x86_64→aarch64），备份里的内核原生库不兼容：
-      # 备份只含产物不含源码，先 clone 内核源码再重建原生库:
+7. 内核项目（acp-kernel-zig）不随备份还原：换机后如需 Zig 原生内核，请 clone 内核仓库并重建（见 RESTORE.md）：
       git clone <内核仓库> ~/Code/TypeScript/billion-context-pi-zig/acp-kernel-zig
-      cd ~/Code/TypeScript/billion-context-pi-zig/acp-kernel-zig && rm -rf native/zig-out && zig build
+      cd ~/Code/TypeScript/billion-context-pi-zig/acp-kernel-zig && zig build
       （或设 BUILD_KERNEL=1 重跑 bash ~/.pi/agent/compiled/update-extensions.sh --build-only 自动重建，详见 RESTORE.md）
 EOF

@@ -16,8 +16,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 AGENT_DIR="$HOME/.pi/agent"
 SKILLS_DIR="$HOME/.skills-manager/skills"
-# billion-context-pi Zig 内核项目（与 update-extensions.sh 的 ACP_KERNEL_ZIG 同名约定）
-KERNEL_ZIG_DIR="${ACP_KERNEL_ZIG:-$HOME/Code/TypeScript/billion-context-pi-zig/acp-kernel-zig}"
 
 # 检查源目录
 [ -d "$AGENT_DIR" ] || { echo "❌ 找不到 $AGENT_DIR"; exit 1; }
@@ -61,23 +59,13 @@ for f in acp.json; do
   [ -f "$HOME/.pi/$f" ] && cp "$HOME/.pi/$f" "$DEST/$f"
 done
 # ------------------------------------------------------------
-# 2.8 billion-context-pi Zig 内核产物（acp-kernel-zig，仅产物不含源码）
-#     只备份 native/zig-out（libacp_kernel.so 原生产物）+ dist/（TS 封装层）；
-#     src/tests/源码与配置文件不备份（源码在 GitHub 仓库，需要重建时才 clone）。
-#     恢复后 update-extensions.sh 直接命中 $ACP_KERNEL_ZIG，无需重新 zig build
-#     即可保持 Zig 原生内核模式（否则会静默回退 npm 包内联的旧 TS 内核）
 # ------------------------------------------------------------
-if [ -d "$KERNEL_ZIG_DIR" ]; then
-  mkdir -p "$DEST/acp-kernel-zig"
-  # 白名单：只保留 native/zig-out/ 与 dist/，其余（src/tests/.git/node_modules/.zig-cache 等）全部排除
-  rsync -a "$KERNEL_ZIG_DIR/" "$DEST/acp-kernel-zig/" \
-    --include 'native/' --include 'native/zig-out/' --include 'native/zig-out/***' \
-    --include 'dist/' --include 'dist/***' \
-    --exclude '*'
-  echo "==> 已备份内核产物（native/zig-out + dist，$KERNEL_ZIG_DIR）"
-else
-  echo "==> 未找到内核项目（$KERNEL_ZIG_DIR），跳过（恢复后将回退 npm 包旧 TS 内核）"
-fi
+# 2.8 billion-context-pi Zig 内核项目（acp-kernel-zig）不备份
+#     内核项目整体不备份（含原生产物）：换机恢复时若还原会覆盖本机现有的
+#     内核项目（restore 会把现有目录 mv 到 .bak 再 rsync 覆盖），有覆盖风险。
+#     内核由 GitHub 仓库 clone + zig build 重建，缺失时 update-extensions.sh
+#     自动回退 npm 包内联的旧 TS 内核（功能可用，无 Zig 原生加速）。
+# ------------------------------------------------------------
 
 # ------------------------------------------------------------
 # 2. 技能不备份：~/.pi/agent/skills/ 是指向 ~/.skills-manager/skills/
@@ -111,10 +99,6 @@ PY
   ls "$SKILLS_DIR" 2>/dev/null || echo '(无)'
   echo
   echo
-  echo "== Zig 内核项目（acp-kernel-zig）=="
-  echo "备份于 acp-kernel-zig/（仅产物 native/zig-out + dist，不含源码）"
-  echo "恢复位置: $KERNEL_ZIG_DIR（可用环境变量 ACP_KERNEL_ZIG 覆盖）"
-  echo "旧备份缺失时 build 自动回退 npm 包旧 TS 内核（功能可用但无 Zig 原生加速）"
   echo "== 已排除内容 =="
   echo "私密:   agent/auth.json（登录凭据，恢复后需重新 /login）"
   echo "        agent/sessions/ agent/pi-sessions-extracted/ agent/state/ agent/missions/ run-history.jsonl"
