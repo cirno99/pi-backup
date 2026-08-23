@@ -51,6 +51,15 @@ for f in package.json bun.lock; do
 done
 
 # ------------------------------------------------------------
+# 2.7 billion-context-pi 全局配置（~/.pi/acp.json 在 agent 目录外，单独复制）
+#     注意：同步修改 restore-pi.sh 还原到 ~/.pi/acp.json
+# ------------------------------------------------------------
+mkdir -p "$DEST"
+for f in acp.json; do
+  [ -f "$HOME/.pi/$f" ] && cp "$HOME/.pi/$f" "$DEST/$f"
+done
+
+# ------------------------------------------------------------
 # 2. 技能不备份：~/.pi/agent/skills/ 是指向 ~/.skills-manager/skills/
 #    的符号链接，技能由 skills-manager 应用管理，恢复时重新安装即可
 #    （manifest.txt 会记录技能名列表）

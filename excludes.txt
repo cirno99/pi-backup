@@ -20,3 +20,8 @@ settings.json.bak*
 
 # --- 技能（~/.pi/agent/skills 是指向 ~/.skills-manager/skills 的符号链接，由 skills-manager 管理）---
 skills/
+
+# --- billion-context-pi 运行日志与状态（acp.log 默认在 ~/.pi/ 下，此处为保险，防其写入 agent 目录）---
+acp.log
+acp.log.*
+acp-state/

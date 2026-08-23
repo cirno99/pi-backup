@@ -43,6 +43,17 @@ echo "==> 恢复核心配置 ..."
 rsync -a "$SRC/agent/" "$HOME/.pi/agent/"
 
 # ------------------------------------------------------------
+# 2b. 还原 billion-context-pi 全局配置（~/.pi/acp.json 在 agent 目录外）
+#     对应 backup-pi.sh 的 2.7 段；无此文件时跳过（未配置过 acp）
+# ------------------------------------------------------------
+if [ -f "$SRC/acp.json" ]; then
+  cp "$SRC/acp.json" "$HOME/.pi/acp.json"
+  echo "==> 已还原 ~/.pi/acp.json（billion-context-pi 全局配置）"
+else
+  echo "==> 备份中无 acp.json（billion-context-pi 未配置或旧备份），跳过"
+fi
+
+# ------------------------------------------------------------
 # 3. 修正 settings.json 中的绝对路径（extensions 数组）
 #    备份里是 $HOME 占位符（或旧格式 /home/xxx），换机后还原为实际路径
 # ------------------------------------------------------------
