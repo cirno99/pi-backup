@@ -22,16 +22,21 @@ pi-backup/
     └── agent/                    # ~/.pi/agent 的核心配置子集
         ├── settings.json         # 主配置（扩展路径已脱敏为 $HOME 占位符）
         ├── AGENTS.md             # 全局开发约定
+        ├── .billion-context-pi-update-check  # ACP 更新检查时间戳
         ├── pi-lsp.json           # LSP 服务器配置（rust-analyzer / gopls / clangd / zls）
         ├── subagents.json        # 子代理配置
         ├── models-store.json     # 模型服务商与价格缓存
+        ├── packages.lock.json    # pi 包安装锁定（digest 校验）
+        ├── package-trust-audit.jsonl  # 包信任审计日志（首次安装记录）
         ├── prompts/              # 提示词模板
         ├── extensions/           # 扩展源码（见下方"使用的扩展"）
         ├── compiled/             # 扩展编译产物 + update-extensions.sh 打包脚本
         ├── themes/               # 主题（catppuccin-macchiato / deep-purple / tokyo-night-dark）
         ├── npm/                  # 扩展依赖配方（package.json + bun.lock，node_modules 不备份）
-        ├── fff/                  # pi-fff 索引缓存（frecency / history 的 LMDB）
+        ├── cache/                # 缓存（modules 等，按需重建）
         ├── git/                  # 各扩展的 git 状态缓存
+        ├── scripts/              # 辅助脚本（verify-acp-kernel.mjs 等）
+        ├── tool-output-artifacts/  # 工具输出产物缓存（hub 等）
         └── pi-cache-optimizer-stats.d/  # pi-cache-optimizer 统计分片
 ```
 
@@ -80,6 +85,7 @@ pi-backup/
 | `pi-cache-optimizer.js` | 缓存优化：提升 prompt 缓存命中率、降低成本 |
 | `billion-context-pi.js` | ACP 上下文管理：`compress` / `decompress` / `search_context` / `acp_status` 自动压缩会话、`acp_delegate` 子代理委托。全局配置 `~/.pi/acp.json`、日志 `~/.pi/acp.log`（均在 agent 目录外，由备份脚本单独处理） |
 | `pi-command-code-provider.js` | 注册 `command-code` provider（OpenAI 兼容端点 `/v1/chat/completions`），模型目录每次会话启动实时拉取，本地维护版 |
+| `asymptotic-thinking.js` | 渐近式思考：六态状态机（START→DEEP_UNDERSTAND→DESIGN→EXECUTE→VERIFY→END）引导结构化推理，`set-task-info` / `transition` / `status` 工具 |
 
 ### pi 包（`packages`，`pi install` 安装）
 
@@ -88,7 +94,6 @@ pi-backup/
 | `@ff-labs/pi-fff` | 文件模糊搜索（`fffind` / `ffgrep`），按访问频率排序 |
 | `pi-context-usage` | 上下文用量统计 |
 | `@tifan/pi-preferred-thinking` | 按模型设定默认思考级别（配合 `extensions/pi-preferred-thinking.json`） |
-| `pi-workspace-history` | 工作区历史记录 |
 | `pi-init` | 项目初始化脚手架（skills / 自定义 agent 模板） |
 | `pi-session-name` | 会话命名 |
 | `pi-md-export` | 将会话导出为 Markdown |

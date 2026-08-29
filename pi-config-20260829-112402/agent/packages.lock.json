@@ -1,0 +1,20 @@
+{
+  "entries": [
+    {
+      "digest_sha256": "e284ecef7c2e52fc61a58f8f8b3cd998b8ec35d26764293191728085e1cf4ba3",
+      "identity": "npm:@ff-labs/pi-fff",
+      "resolved": {
+        "installed_version": "0.10.5",
+        "kind": "npm",
+        "name": "@ff-labs/pi-fff",
+        "pinned": false,
+        "requested_spec": "@ff-labs/pi-fff",
+        "requested_version": null
+      },
+      "source": "npm:@ff-labs/pi-fff",
+      "source_kind": "npm",
+      "trust_state": "trusted"
+    }
+  ],
+  "schema": "pi.package_lock.v1"
+}

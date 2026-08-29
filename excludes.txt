@@ -37,3 +37,6 @@ acp-state/
 
 # --- fff 工具运行时索引（frecency/history 的 LMDB 数据库，属运行时状态，不备份）---
 fff/
+
+# --- 模块缓存（bun 等运行时生成的 cache/modules/，可重建，不备份）---
+cache/

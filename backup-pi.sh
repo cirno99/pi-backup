@@ -94,7 +94,7 @@ PY
   echo "agent/npm/package.json + bun.lock"
   echo "恢复时: bun ci --omit=peer 重建 node_modules → update-extensions.sh 重新打包"
   echo
-  b
+  echo
   echo "== 技能列表（由 skills-manager 管理，不在备份内，恢复后需重新安装）=="
   ls "$SKILLS_DIR" 2>/dev/null || echo '(无)'
   echo

@@ -1,0 +1,23 @@
+{
+  "servers": {
+    "rust-analyzer": {
+      "command": ["rust-analyzer"],
+      "extensions": [".rs"],
+      "pullDiagnosticsGraceMs": 5000
+    },
+    "gopls": {
+      "command": ["gopls"],
+      "extensions": [".go"]
+    },
+    "clangd": {
+      "command": ["clangd", "--background-index", "--clang-tidy"],
+      "extensions": [".c", ".cpp", ".cc", ".cxx", ".c++", ".h", ".hpp", ".hh", ".hxx", ".h++"],
+      "skipDirectories": ["build"]
+    },
+    "zls": {
+      "command": ["zls"],
+      "extensions": [".zig", ".zon"],
+      "skipDirectories": [".zig-cache", "zig-out"]
+    }
+  }
+}
